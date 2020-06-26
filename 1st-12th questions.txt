@@ -1,0 +1,1321 @@
+1)
+
+package com.htc.exercise;
+
+import java.util.Scanner;
+
+public class JavaPetShop1
+{
+public static void main(String[] args) 
+{
+Scanner scanner=new Scanner(System.in);
+System.out.println("Enter the total bill:");
+double totalBill=scanner.nextDouble();
+System.out.println("Enter the type of member ship:");
+String memberShip=scanner.next();
+double afterDiscount;
+double discount;
+if(memberShip.equalsIgnoreCase("premium"))
+{
+	System.out.println("20% discount is available on total bill:");
+	discount=20;
+	afterDiscount=totalBill*(discount/100);
+	System.out.println("Discount availed:"+afterDiscount);
+	totalBill=totalBill-afterDiscount;
+}
+else if(memberShip.equalsIgnoreCase("gold"))
+{
+	System.out.println("15% discount is available on total bill:");
+	discount=15;
+	afterDiscount=totalBill*(discount/100);
+	System.out.println("Discount availed:"+afterDiscount);
+	totalBill=totalBill-afterDiscount;
+}
+else if(memberShip.equalsIgnoreCase("silver"))
+{
+	System.out.println("10% discount is available on total bill:");
+	discount=10;
+	afterDiscount=totalBill*(discount/100);
+	System.out.println("Discount availed:"+afterDiscount);
+	totalBill=totalBill-afterDiscount;
+}
+else
+{
+	if(totalBill>2000)
+	{
+	System.out.println("5% discount is available on total bill:");
+	discount=5;
+	afterDiscount=totalBill*(discount/100);
+	System.out.println("Discount availed:"+afterDiscount);
+	totalBill=totalBill-afterDiscount;
+	}
+}
+System.out.println("total Bill after discount is:"+totalBill);
+}
+}
+
+2)
+package com.htc.exercise;
+
+import java.util.Scanner;
+
+public class JavaPetShop2 
+{
+public static void main(String[] args) 
+{
+Scanner scanner=new Scanner(System.in);
+System.out.println("Enter the priority:");
+String priority=scanner.nextLine();
+System.out.println("Enter the weight kilograms:");
+double weight=scanner.nextDouble();
+System.out.println("Enter the distance in kilometers:");
+double distance=scanner.nextDouble();
+switch(priority)
+{
+case "not urgent":
+	if(weight<=5)
+	{
+		System.out.println("Dispatch By Bike:");
+	}
+	else
+	{
+		if(distance<=250)
+		{
+			System.out.println("Dispatch By Lorry:");
+		}
+		else
+		{
+			System.out.println("Dispatch By Train:");
+		}
+	}
+	break;
+case "urgent":
+	if(distance<50)
+	{
+		if(weight<100)
+		{
+			System.out.println("Dispatch By Van:");
+		}
+		else
+		{
+			System.out.println("Dispatch By Train:");
+		}
+	}
+	else
+	{
+		System.out.println("Dispatch By Train");
+	}
+	break;
+default:
+	System.out.println("No input was selected:");
+}
+}
+}
+
+3)
+
+package com.htc.exercise;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Scanner;
+
+public class Program3
+{
+	  @SuppressWarnings("resource")
+	public static void main(String args[]) 
+		        throws ParseException 
+		    { 
+		    	Scanner scanner=new Scanner(System.in);
+
+		        SimpleDateFormat 
+		            simpleDF= new SimpleDateFormat("yyyy-MM-dd"); 
+		  
+		        
+		        Date[] date=new Date[3];
+		        date[0] = simpleDF.parse("2018-04-09"); 
+		        date[1] = simpleDF.parse("2018-04-20"); 
+		        date[2]=simpleDF.parse("2018-04-29");
+		    
+		       
+		        	System.out.println("Enter search date:");
+		        	String inputKey=scanner.next();
+		        	Date keyDate=simpleDF.parse(inputKey);
+		        	int index=0;
+		         while(index < date.length)
+		         {
+					if(keyDate.compareTo(date[index])==0) 
+					{
+						System.out.println("today available");
+						break;
+					}
+				else if(keyDate.compareTo(date[0])<0) 
+				{
+								System.out.println("next available are 2018-04-09,2018-04-20");	
+								break;
+				}
+				else if((keyDate.compareTo(date[0])>0)&&(keyDate.compareTo(date[1])<0)) 
+				{
+								System.out.println("next available are 2018-04-20,2018-04-29");
+								break;
+				}
+				else if((keyDate.compareTo(date[1])>0)&&(keyDate.compareTo(date[2])<0))
+				{
+								System.out.println("next available are 2018-04-29");
+								break;
+			        }
+				else if(keyDate.compareTo(date[2])> 0)
+				{
+						System.out.println("next available date is 2018-04-09");
+						break;
+				}
+				else 
+				{
+					index++;
+				}
+		         } 
+		        
+		    }
+}
+
+
+
+4)
+
+package com.htc.exercise;
+
+import java.util.Scanner;
+
+public class JavaPetShop4 
+{
+public static void main(String[] args) 
+{
+Scanner scanner=new Scanner(System.in);
+System.out.println("Enter the size of array1:");
+int size1=scanner.nextInt();
+String[] array1=new String[size1];
+System.out.println("Enter the elements into array1:");
+for(int index1=0;index1<array1.length;index1++)
+{
+	array1[index1]=scanner.next();
+}
+int n=array1.length-1;
+System.out.println("Enter the size of array2:");
+int size2=scanner.nextInt();
+String[] array2=new String[size2];
+System.out.println("Enter the elements into array2:");
+for(int index2=0;index2<array2.length;index2++)
+{
+	array2[index2]=scanner.next();
+}
+for(int index3=0;index3<array2.length;index3++)
+{
+	int index4=0;
+	for(int index5=0;index5<=n;index5++)
+	{
+		if(!array2[index3].equals(array1[index5]))
+		{
+			array1[index4]=array1[index5];
+			index4++;
+		}
+	}
+	n--;
+}
+System.out.println("Remaining Orders Are:");
+for(int index6=0;index6<=n;index6++)
+{
+	System.out.println(array1[index6]);
+}
+}
+}
+
+
+5)
+package com.htc.exercise;
+
+import java.util.Scanner;
+
+public class JavaPetShop5 
+{
+public static void main(String[] args) 
+{
+Scanner scanner=new Scanner(System.in);
+System.out.println("Enter the number of rows:");
+int rows=scanner.nextInt();
+System.out.println("Enter the number of columns:");
+int columns=scanner.nextInt();
+String[][] array=new String[rows][columns];
+System.out.println("Enter the elements into array:");
+for(int index1=0;index1<rows;index1++)
+{
+	for(int index2=0;index2<columns;index2++)
+	{
+		array[index1][index2]=scanner.next();
+	}
+	System.out.println();
+}
+System.out.println("Enter the number of rows:");
+int rows2=scanner.nextInt();
+System.out.println("Enter the number of columns:");
+int columns2=scanner.nextInt();
+String[][] array2=new String[rows2][columns2];
+System.out.println("Enter the elements into array2:");
+for(int index3=0;index3<rows2;index3++)
+{
+	for(int index4=0;index4<columns2;index4++)
+	{
+		array2[index3][index4]=scanner.next();
+	}
+	System.out.println();
+}
+for(int index5=0;index5<rows;index5++)
+{
+	int a=0;
+	if(array[index5][1].equals(array2[index5][0]))
+	{
+		a=Integer.parseInt(array[index5][2])*Integer.parseInt(array2[index5][1]);
+	}
+	System.out.println(array[index5][0]+" "+array[index5][1]+" "+a);
+}
+}
+}
+
+
+6)
+
+package com.htc.exercise;
+
+import java.util.Scanner;
+
+public class EmailValidation 
+{
+public static void main(String[] args) 
+{
+Scanner scanner=new Scanner(System.in);
+System.out.println("Enter the email to be validated:");
+String email=scanner.next();
+boolean status=validateEmail(email);
+if(status)
+{
+	System.out.println("Valid Email Address");
+}
+else
+{
+	System.out.println("Invalid Email Address");
+}
+}
+public static boolean validateEmail(String email)
+{
+int n=email.length();
+if((n>=10&&n<=50)&&((email.charAt(0)!='.')&&(email.charAt(n-1)!='@'))&&((email.charAt(n-1)=='m')||(email.charAt(n-1)=='n')))
+{
+int index=0;
+int count=0;
+while(index<n)
+{
+	if(email.charAt(index)=='@')
+	{
+		count++;
+	}
+}
+int a = 0,b = 0,c=0;
+if(count==1)
+{
+	for(int index2=0;index2<n;index2++)
+	{
+		if(email.charAt(index2)=='.')
+		{
+			a=index2;
+		}
+		if(email.charAt(index2)=='@')
+		{
+			b=index2;
+		}
+	}
+	if(a>b)
+	{
+		for(int index3=0;index3<n;index3++)
+		{
+			if(email.charAt(index3)=='_')
+			{
+				c=index3;
+			}
+		}
+		if(c<b)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
+else
+{
+	return false;
+}
+}
+else
+{
+	return false;
+}
+}
+}
+
+7)
+
+package com.htc.exercise;
+
+public class FunctionProtoTypes 
+{
+//Online Shopping
+	public static boolean userRegistration(String name, String userName, String password, String phoneNumber)
+	{
+		return true;
+	}
+	public static void searchItem(String itemName)
+	{}
+	public static void filters(double price, String brandName,String mostlyUsed)
+	{}
+	public static void payment(String mode,long cardNumber,double amount)
+	{}
+//E-Ticket Application
+	public static boolean userRegistrationForETicket(String name, String userName, String password, String phoneNumber)
+	{ return true; }
+	public static void searchingVehicle(String from, String to, String date)
+	{}
+	public static void selectionOfSeats(String seatNumber, int numberOfPersons)
+	{}
+	public static void bookingDetails(long ticketNumber, String from, String to, String dateOfJourney, String fullName, int age, String gender)
+	{}
+	public static void paymentForETicket(String modeOfPayment, long cardDetails, double fare)
+	{}
+	public static void bookingCancellation(long ticketNumber, String date)
+	{}
+//Fund Transfer
+	public static boolean userRegistrationForFundTransfer(String name, String userName, String password, String phoneNumber)
+	{ return true; }
+	public static void transferFund(long from, long to, double amount)
+	{}
+	public static void paymentMode(String mode, long cardNumber)
+	{}
+	public static void balance(long accountNumber, double price)
+	{}
+	public static void transactionHistory(long to, String transactionId, String transactionDate, double price)
+	{}
+//Mobile Recharge
+	public static boolean userRegistrationForMobileRecharge(String name, String userName, String password, String phoneNumber)
+	{ return true; }
+	public static void browsePlans(String unlimitedCallsDetails, String roamingPlans, String unlimitedDataDetails, String smartRecharge, double price)
+	{}
+	public static void paymentModeForMobileRecharge(String mode, long cardNumber)
+	{}
+	public static void invoice(String transactionId, String date, String phoneNumber, String planDetails)
+	{}
+	public static void transactionHistory(String transactionId, String transactionDate, String planDetails)
+	{}
+}
+
+
+
+8)
+
+package com.htc.exercise;
+
+import java.util.Scanner;
+
+public class GeneratedSMS 
+{
+public static void main(String[] args) 
+{
+Scanner scanner=new Scanner(System.in);
+System.out.println("Enter the Generated SMS:");
+String sms=scanner.next();
+int n=sms.length();
+if((n<=100)&&(sms.charAt(n-1)=='.')&&((sms.charAt(0)!=' ')&&(sms.charAt(n-1)!=' ')))
+{
+	int count=0;
+	for(int index=0;index<n;index++)
+	{
+		if(sms.charAt(index)==',')
+		{
+			count++;
+		}
+	}
+	if((count>=1))
+	{
+		int count1=0;
+		for(int index2=1;index2<n-1;index2++)
+		{
+			if(sms.charAt(index2)=='.')
+			{
+				count1++;
+			}
+		}
+		if(count1>=1)
+		{
+			System.out.println("Invalid SMS");
+		}
+		else
+		{
+			System.out.println("Valid SMS");
+		}
+	}
+	else
+	{
+		System.out.println("Invalid SMS");
+	}
+}
+else
+{
+	System.out.println("Invalid SMS");
+}
+}
+}
+
+9)
+
+Pet Class:
+---------
+
+package com.htc.problem9;
+
+public class Pet 
+{
+private String petId;
+private String petType;
+private String petDOB;
+private double price;
+private int quantity;
+public String getPetId() {
+	return petId;
+}
+public void setPetId(String petId) {
+	this.petId = petId;
+}
+public String getPetType() {
+	return petType;
+}
+public void setPetType(String petType) {
+	this.petType = petType;
+}
+public String getPetDOB() {
+	return petDOB;
+}
+public void setPetDOB(String petDOB) {
+	this.petDOB = petDOB;
+}
+public double getPrice() {
+	return price;
+}
+public void setPrice(double price) {
+	this.price = price;
+}
+public int getQuantity() {
+	return quantity;
+}
+public void setQuantity(int quantity) {
+	this.quantity = quantity;
+}
+public Pet()
+{
+	
+}
+public Pet(String petId, String petType, String petDOB, double price, int quantity) {
+	super();
+	this.petId = petId;
+	this.petType = petType;
+	this.petDOB = petDOB;
+	this.price = price;
+	this.quantity = quantity;
+}
+@Override
+public String toString() {
+	return "Pet [petId=" + petId + ", petType=" + petType + ", petDOB=" + petDOB + ", price=" + price + ", quantity="
+			+ quantity + "]";
+}
+public static void main(String[] args) 
+{
+	Pet pet=new Pet();
+	pet.setPetId("1");
+	pet.setPetDOB("2018-09-19");
+	pet.setPetType("rabbits");
+	pet.setPrice(9000.0);
+	pet.setQuantity(9);
+	
+	System.out.println(pet.getPetId());
+	System.out.println(pet.getPetDOB());
+	System.out.println(pet.getPetType());
+	System.out.println(pet.getPrice());
+	System.out.println(pet.getQuantity());
+}
+
+}
+
+
+
+
+PetStore Class:
+---------
+
+package com.htc.problem9;
+
+import java.util.Arrays;
+
+public class PetStore 
+{
+private String storeId;
+private String storeName;
+private String address;
+private Pet[] pet;
+public String getStoreId() {
+	return storeId;
+}
+public void setStoreId(String storeId) {
+	this.storeId = storeId;
+}
+public String getStoreName() {
+	return storeName;
+}
+public void setStoreName(String storeName) {
+	this.storeName = storeName;
+}
+public String getAddress() {
+	return address;
+}
+public void setAddress(String address) {
+	this.address = address;
+}
+public Pet[] getPet() {
+	return pet;
+}
+public void setPet(Pet[] pet) {
+	this.pet = pet;
+}
+public PetStore(String storeId, String storeName, String address, Pet[] pet) {
+	super();
+	this.storeId = storeId;
+	this.storeName = storeName;
+	this.address = address;
+	this.pet = pet;
+}
+@Override
+public String toString() {
+	return "PetStore [storeId=" + storeId + ", storeName=" + storeName + ", address=" + address + ", pet="
+			+ Arrays.toString(pet) + "]";
+}
+public String toString1() 
+{
+	return "StoreImplementingClass [pet=" + Arrays.toString(pet) + "]";
+}
+}
+
+
+IStoreServiceProvider Interface:
+-------------------------------
+
+package com.htc.problem9;
+
+public interface IStoreServiceProvider 
+{
+	
+public Pet searchPet(String petId);
+
+public Pet[] availablePets();
+
+public boolean updatePetDetails(String updatedPet);
+
+public boolean sellPet(String petId, int quantity);
+
+}
+
+
+IStoreServiceProvider Implementation Class:
+------------------------------------------
+
+package com.htc.problem9;
+
+import java.util.Scanner;
+
+public class StoreImplementingClass implements IStoreServiceProvider
+{
+	static Scanner scanner=new Scanner(System.in);	
+	static Pet[] newPets;
+	static PetStore petStore=new PetStore("S1","ABC","Hyderabad",null);
+	static Pet[] pet= {new Pet("1","cats","2018-09-09",9000.0,9), new Pet("2","dogs","2016-09-09",19000.0,5)};
+	public static void main(String[] args)
+	{	
+		System.out.println("Enter the number of pets:");
+		int size=scanner.nextInt();
+		newPets=new Pet[size+2];
+		for(int i=0;i<size;i++)
+		{	
+		System.out.println("Enter the Petid:");
+		String petId=scanner.next();
+		System.out.println("Enter the petType:");
+		String petType=scanner.next();
+		System.out.println("Enter the petDOB:");
+		String petDOB=scanner.next();
+		System.out.println("Enter the petPrice:");
+		double petPrice=scanner.nextDouble();
+		System.out.println("Enter the petQuantity:");
+		int quantity=scanner.nextInt();
+		newPets[i]=new Pet(petId,petType,petDOB,petPrice,quantity);
+		}
+		int a=size+2;
+		int k=0;
+		for(int j=size;j<a;j++)
+		{
+			newPets[j]=pet[k];
+			k++;
+		}
+		petStore.setPet(newPets);
+		System.out.println(petStore);
+		StoreImplementingClass sic=new StoreImplementingClass();
+		System.out.println("Enter the petId to be searched:");
+		String petId=scanner.next();
+		Pet pet=sic.searchPet(petId);
+		System.out.println("Searched Pet is: "+pet);
+		System.out.println("Enter the petId to be searched:");
+		String petId2=scanner.next();
+		boolean updatedStatus=sic.updatePetDetails(petId2);
+		if(updatedStatus)
+		{
+			System.out.println("Updated Successfully:");
+		}
+		else
+		{
+			System.out.println("Pet was not updated successfully:");
+		}
+		Pet[] pet2=sic.availablePets();
+		System.out.println("Enter the petId to be searched:");
+		String petId3=scanner.next();
+		System.out.println("Enter the quantity:");
+		int quantity=scanner.nextInt();
+		boolean sellingStatus=sic.sellPet(petId3,quantity);
+		if(sellingStatus)
+		{
+			System.out.println("Pet Sold Successfully:");
+		}
+		else
+		{
+			System.out.println("Pet was not sold successfully:");
+		}
+	}
+	@Override
+	public Pet searchPet(String petId) 
+	{
+		Pet pet = null;
+		// TODO Auto-generated method stub
+		int index=0;
+		while(index<newPets.length)
+		{
+			if(petId.equals(newPets[index].getPetId()))
+			{
+				pet=newPets[index];
+				break;
+			}
+			else
+			{
+				index++;
+			}
+		}
+		return pet;
+	}
+
+	@Override
+	public Pet[] availablePets() 
+	{			
+		// TODO Auto-generated method stub
+		System.out.println("Available Pets are:");
+		int index=0;
+		while(index<newPets.length)
+		{
+			System.out.println(newPets[index]);
+			index++;
+		}
+		return null;
+	}
+	
+	public boolean updatePetPrice(String petId)
+	{
+		boolean status=false;
+		System.out.println("Enter the price to be Updated:");
+		double price=scanner.nextDouble();
+		for(int i=0;i<newPets.length;i++)
+		{
+			if(newPets[i].getPetId().equals(petId))
+			{
+				newPets[i].setPrice(price);
+				petStore.setPet(newPets);
+				System.out.println("Updated Pet Detials are:");
+				System.out.println(newPets[i]);
+				status=true;
+				break;
+			}
+			else
+			{
+				status=false;
+			}
+		}
+		return status;
+	}
+	
+	public boolean updatePetQuantity(String petId)
+	{
+		boolean status=false;
+		System.out.println("Enter the petQuantity:");
+		int quantity=scanner.nextInt();
+		for(int i=0;i<newPets.length;i++)
+		{
+			if(newPets[i].getPetId().equals(petId))
+			{
+				newPets[i].setQuantity(quantity);
+				petStore.setPet(newPets);
+				System.out.println("Updated Pet Detials are:");
+				System.out.println(newPets[i]);
+				status=true;
+				break;
+			}
+			else
+			{
+			    status=false;
+			}
+		}
+		return status;
+	}
+	
+	public boolean upadatePetType(String petId)
+	{
+		boolean status=false;
+		System.out.println("Enter the petType:");
+		String petType=scanner.next();
+		for(int i=0;i<newPets.length;i++)
+		{
+			if(newPets[i].getPetId().equals(petId))
+			{
+				newPets[i].setPetType(petType);
+				petStore.setPet(newPets);
+				System.out.println("Updated Pet Detials are:");
+				System.out.println(newPets[i]);
+				status=true;
+				break;
+			}
+			else
+			{
+			    status=false;
+			}
+		}
+		return status;
+	}
+
+	@Override
+	public boolean updatePetDetails(String updatedPet) 
+	{
+		boolean status=false;
+		// TODO Auto-generated method stub
+		String choice;
+		do 
+		{
+			System.out.println("1 for updatePetBasedOnPetType:");
+			System.out.println("2 for updatePetBasedOnPetPrice:");
+			System.out.println("3 for updatePetBasedOnPetQuantity:");
+			System.out.println("Enter your selection:");
+			int ch=scanner.nextInt();
+			boolean status1=false;
+			switch(ch)
+			{
+			case 1:
+				status1=upadatePetType(updatedPet);
+				if(status1)
+				{
+					status=true;
+				}
+				else
+				{
+					status=false;
+				}
+				break;
+			case 2:
+				status1=updatePetPrice(updatedPet);
+				if(status1)
+				{
+					status=true;
+				}
+				else
+				{
+					status=false;
+				}
+				break;
+			case 3:
+				status1=updatePetQuantity(updatedPet);
+				if(status1)
+				{
+					status=true;
+				}
+				else
+				{
+					status=false;
+				}
+				break;
+			default:
+				System.out.println("Invalid Choice:");
+			}
+			System.out.println("Do you wish to update other details:");
+			System.out.println("Yes to continue:");
+			System.out.println("No to stop:");
+			System.out.println("Enter your choice:");
+			choice=scanner.next();
+		}while(choice.equalsIgnoreCase("yes"));
+		
+		return status;
+	}
+
+	@Override
+	public boolean sellPet(String petId, int quantity) 
+	{
+		boolean status=false;
+		// TODO Auto-generated method stub
+		for(int i=0;i<newPets.length;i++)
+		{
+			if(newPets[i].getPetId().equals(petId))
+			{
+				int b=newPets[i].getQuantity();
+				int a=b;
+				b=b-quantity;
+				if(b==0)
+				{
+				   newPets[i]=null;
+				   System.out.println("All pets are sold:");
+				   petStore.setPet(newPets);
+				   System.out.println("After selling remaining pets are:"+ petStore);
+				   status=true;
+				   break;
+				}
+				else if(a<quantity)
+				{
+					System.out.println("Quantity was not sufficient:");
+					status=false;
+					break;
+				}
+				else
+				{
+					newPets[i].setQuantity(b);
+					petStore.setPet(newPets);
+					status=true;
+					break;
+				}
+			}
+			else
+			{
+				status=false;
+			}
+		}
+		return status;
+	}
+
+}
+
+10) 
+a)
+Pet Class:
+---------
+
+package com.htc.problem10;
+
+public class Pet 
+{
+private String petId;
+private String petType;
+private String petDOB;
+private double price;
+private int quantity;
+public String getPetId() {
+	return petId;
+}
+public void setPetId(String petId) {
+	this.petId = petId;
+}
+public String getPetType() {
+	return petType;
+}
+public void setPetType(String petType) {
+	this.petType = petType;
+}
+public String getPetDOB() {
+	return petDOB;
+}
+public void setPetDOB(String petDOB) {
+	this.petDOB = petDOB;
+}
+public double getPrice() {
+	return price;
+}
+public void setPrice(double price) {
+	this.price = price;
+}
+public int getQuantity() {
+	return quantity;
+}
+public void setQuantity(int quantity) {
+	this.quantity = quantity;
+}
+public Pet()
+{
+	
+}
+public Pet(String petId, String petType, String petDOB, double price, int quantity) {
+	super();
+	this.petId = petId;
+	this.petType = petType;
+	this.petDOB = petDOB;
+	this.price = price;
+	this.quantity = quantity;
+}
+@Override
+public String toString() {
+	return "Pet [petId=" + petId + ", petType=" + petType + ", petDOB=" + petDOB + ", price=" + price + ", quantity="
+			+ quantity + "]";
+}
+
+}
+
+
+IStoreServiceProvider Interface:
+-------------------------------
+
+package com.htc.problem10;
+
+public interface IStoreServiceProvider 
+{
+	public boolean purchaseOrder(String petType, int quantity);
+}
+
+
+ImplementatingIStoreServiceProvider Class:
+-----------------------------------------
+package com.htc.problem10;
+
+import java.util.Scanner;
+
+public class ImplementingIStore implements IStoreServiceProvider
+{
+	static Scanner scanner=new Scanner(System.in);
+	static Pet[] pet= new Pet[2];
+	public static void main(String[] args) 
+	{
+	for(int index=0;index<pet.length;index++)
+	{
+		System.out.println("Enter the petId:");
+		String petId=scanner.next();
+		System.out.println("Enter the petType:");
+		String petType=scanner.next();
+		System.out.println("Enter the petDOB:");
+		String petDOB=scanner.next();
+		System.out.println("Enter the petPrice:");
+		double petPrice=scanner.nextDouble();
+		System.out.println("Enter the quantity:");
+		int quantity=scanner.nextInt();
+		pet[index]=new Pet(petId, petType, petDOB, petPrice, quantity);
+	}
+	
+	System.out.println("Enter details for purchasing the pets:");
+	System.out.println("Enter the petType:");
+	String petType=scanner.next();
+	System.out.println("Enter the quantity:");
+	int quantity=scanner.nextInt();
+	ImplementingIStore store=new ImplementingIStore();
+	boolean purchasedStatus=store.purchaseOrder(petType, quantity);
+	if(purchasedStatus)
+	{
+		System.out.println("Purchased Successfully");
+	}
+	else
+	{
+		System.out.println("Not Purchased");
+	}
+	}
+
+	@Override
+	public boolean purchaseOrder(String petType, int quantity) 
+	{
+		boolean status = false;
+		// TODO Auto-generated method stub
+		for(int index=0;index<pet.length;index++)
+		{
+			if(pet[index].getPetType().equalsIgnoreCase(petType)&&(quantity<(pet[index].getQuantity())))
+			{
+				double totalBill=quantity*(pet[index].getPrice());
+				int remainingQuantity=pet[index].getQuantity()-quantity;
+				System.out.println("Purchased Details are:");
+				System.out.println("Pet Type: "+petType);
+				System.out.println("Quantity Ordered: "+quantity);
+				System.out.println("Price per each Pet:"+pet[index].getPrice());
+				System.out.println("Total Bill:"+totalBill);
+				pet[index].setQuantity(remainingQuantity);
+				System.out.println("After Selling, remaining pets are:");
+				System.out.println(pet[index]);
+				status=true;
+			}
+		}
+		return status;
+	}
+
+}
+
+10)
+b),c)
+
+Pet Class:
+---------
+
+package com.htc.problem10;
+
+public class Pet 
+{
+private String petId;
+private String petType;
+private String petDOB;
+private double price;
+private int quantity;
+public String getPetId() {
+	return petId;
+}
+public void setPetId(String petId) {
+	this.petId = petId;
+}
+public String getPetType() {
+	return petType;
+}
+public void setPetType(String petType) {
+	this.petType = petType;
+}
+public String getPetDOB() {
+	return petDOB;
+}
+public void setPetDOB(String petDOB) {
+	this.petDOB = petDOB;
+}
+public double getPrice() {
+	return price;
+}
+public void setPrice(double price) {
+	this.price = price;
+}
+public int getQuantity() {
+	return quantity;
+}
+public void setQuantity(int quantity) {
+	this.quantity = quantity;
+}
+public Pet()
+{
+	
+}
+public Pet(String petId, String petType, String petDOB, double price, int quantity) {
+	super();
+	this.petId = petId;
+	this.petType = petType;
+	this.petDOB = petDOB;
+	this.price = price;
+	this.quantity = quantity;
+}
+@Override
+public String toString() {
+	return "Pet [petId=" + petId + ", petType=" + petType + ", petDOB=" + petDOB + ", price=" + price + ", quantity="
+			+ quantity + "]";
+}
+
+}
+
+SupplierServiceProvider Abstract Class:
+--------------------------------------
+
+package com.htc.problem10;
+
+public abstract class SupplierServiceProvider 
+{
+abstract public boolean sellPets(String petType, int quantity);
+
+}
+
+Supplier Class:(implementing the abstract method present in the above abstract class)
+--------------
+
+package com.htc.problem10;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Supplier extends SupplierServiceProvider 
+{
+private String supplierId;
+private String supplierName;
+private String supplierAddress;
+static private Pet[] pet;
+static Scanner scanner=new Scanner(System.in);
+public static void main(String[] args) 
+{
+	pet = new Pet[1];
+	for(int index=0;index<pet.length;index++)
+	{
+		System.out.println("Enter the petId:");
+		String petId=scanner.next();
+		System.out.println("Enter the petType:");
+		String petType=scanner.next();
+		System.out.println("Enter the petDOB:");
+		String petDOB=scanner.next();
+		System.out.println("Enter the petPrice:");
+		double petPrice=scanner.nextDouble();
+		System.out.println("Enter the quantity:");
+		int quantity=scanner.nextInt();
+		pet[index]=new Pet(petId, petType, petDOB, petPrice, quantity);
+	}
+	for(int index=0;index<pet.length;index++)
+	{
+	System.out.println(pet[index]);
+	}
+	System.out.println("Present the Supply details:");
+	System.out.println("Enter the petType:");
+	String petType=scanner.next();
+	System.out.println("Enter the quantity:");
+	int quantity=scanner.nextInt();
+	System.out.println("Enter the supplierName:");
+	String supplierName=scanner.next();
+	System.out.println("Enter the Supplier Address:");
+	String supplierAddress=scanner.next();
+	System.out.println("Enter the supplierId:");
+	String supplierId=scanner.next();
+    Supplier supplier=new Supplier();
+    boolean soldStatus=supplier.sellPets(petType, quantity);
+    if(soldStatus)
+    {
+    	System.out.println("pets are sold");
+    }
+    else
+    {
+    	System.out.println("pets are not sold:");
+    }
+}
+
+@Override
+public boolean sellPets(String petType, int quantity)
+{
+	boolean status=false;
+	// TODO Auto-generated method stub
+	for(int index=0;index<pet.length;index++)
+	{
+		if(pet[index].getPetType().equalsIgnoreCase(petType)&&quantity<=pet[index].getQuantity())
+		{
+			int subquantity=pet[index].getQuantity();
+			int remove=subquantity-quantity;
+			pet[index].setQuantity(quantity);
+			System.out.println("Sold Pets Details to Supplier: "+pet[index]);
+			pet[index].setQuantity(remove);
+			System.out.println("Remaining Pets After Selling Was: "+pet[index]);
+			status=true;
+		}
+	}
+	return status;
+}
+
+@Override
+public String toString() {
+	return "PetStore [storeId=" + supplierId + ", storeName=" + supplierName + ", address=" + supplierAddress + ", pet="
+			+ Arrays.toString(pet) + "]";
+}
+
+}
+
+11)
+
+UberApp:
+-------
+UserRegistration
+Login
+HomePage
+SelectingTypeOfCab
+LocationDetails
+CabDetails
+ModeOfPayment
+
+AmazonApp:
+---------
+UserRegistration
+Login
+HomePage
+SearchForProduct
+SelectingTheProduct(AddToCart)
+ProductDeliveryAddress
+ModeOfPayment
+ProductCancellation
+
+
+IRCTCApp:
+--------
+UserRegistration
+Login
+SearchForTrain
+PassengerInformation
+ModeOfPayment
+TicketCancellation
+BookingHistory
+
+SwiggyApp:
+---------
+UserRegistration
+Login
+HomePage
+SearchForRestaurant
+AddFoodToCart
+FoodDeliveryAddress
+ModeOfPayment
+FoodCancellation
+RepeatTheItem
+
+EportalApp:
+----------
+UserRegistration
+Login
+HomePage
+EmployeeProfile
+PayRoll
+Attendence
+PolicyDocuments
+EditProfile
+ChangePassword
+LatestAchievedProjects
+OtherLinks
+
+12)
+
+Classes:
+-------
+Excellent
+Lazy
+HTCGlobalServices
+Ram
+
+Functions:
+---------
+transferMoney
+sleep
+fast
+eating
+
+variables:
+---------
+status
+age
+mobilenumber
+
+
+
+
+

@@ -1,0 +1,126 @@
+Pet Class:
+---------
+
+package com.htc.problem23;
+
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Scanner;
+
+public class Pet 
+{
+private String petId;
+private String petType;
+private String petDOB;
+private double price;
+private int quantity;
+private String image;
+public String getPetId() {
+	return petId;
+}
+public void setPetId(String petId) {
+	this.petId = petId;
+}
+public String getPetType() {
+	return petType;
+}
+public void setPetType(String petType) {
+	this.petType = petType;
+}
+public String getPetDOB() {
+	return petDOB;
+}
+public void setPetDOB(String petDOB) {
+	this.petDOB = petDOB;
+}
+public double getPrice() {
+	return price;
+}
+public void setPrice(double price) {
+	this.price = price;
+}
+public int getQuantity() {
+	return quantity;
+}
+public void setQuantity(int quantity) {
+	this.quantity = quantity;
+}
+
+public String getImage() {
+	return image;
+}
+public void setImage(String image) {
+	this.image = image;
+}
+public Pet()
+{
+	
+}
+
+public Pet(String petId, String petType, String petDOB, double price, int quantity, String image) {
+	super();
+	this.petId = petId;
+	this.petType = petType;
+	this.petDOB = petDOB;
+	this.price = price;
+	this.quantity = quantity;
+	this.image = image;
+}
+@Override
+public String toString() {
+	return "Pet [petId=" + petId + ", petType=" + petType + ", petDOB=" + petDOB + ", price=" + price + ", quantity="
+			+ quantity + ", image=" + image + "]";
+}
+public static void main(String[] args) 
+{
+Scanner scanner=new Scanner(System.in);
+Pet pet=new Pet();
+pet.petType="rabbits";
+pet.petDOB="2019-09-09";
+pet.price=9000.0;
+System.out.println("Converting to the other languages:");
+System.out.println("India Date and Number Formats:");
+System.out.println(pet.petType);
+Locale locale=new Locale("en","IN");
+DateFormat dateFormat=DateFormat.getDateInstance(DateFormat.LONG, locale);
+Date date=new Date();
+System.out.println(dateFormat.format(date));
+NumberFormat numberFormat=NumberFormat.getCurrencyInstance(locale);
+System.out.println(numberFormat.format(pet.price));
+System.out.println("-----------------------------------");
+System.out.println("Italy Date and Number Formats:");
+System.out.println(pet.petType);
+DateFormat dateFormat2=DateFormat.getDateInstance(DateFormat.LONG, Locale.ITALY);
+System.out.println(dateFormat2.format(date));
+Locale locale2=Locale.ITALY;
+NumberFormat numberFormat2=NumberFormat.getCurrencyInstance(locale2);
+System.out.println(numberFormat2.format(pet.price));
+System.out.println("-------------------------------------");
+System.out.println("UK Date and Number Formats:");
+System.out.println(pet.petType);
+DateFormat dateFormat3=DateFormat.getDateInstance(DateFormat.LONG, Locale.UK);
+System.out.println(dateFormat3.format(date));
+Locale locale3=Locale.UK;
+NumberFormat numberFormat3=NumberFormat.getCurrencyInstance(locale3);
+System.out.println(numberFormat3.format(pet.price));
+System.out.println("---------------------------------------");
+System.out.println("China Date and Number Formats:");
+System.out.println(pet.petType);
+DateFormat dateFormat4=DateFormat.getDateInstance(DateFormat.LONG, Locale.CHINA);
+System.out.println(dateFormat4.format(date));
+Locale locale4=Locale.CHINA;
+NumberFormat numberFormat4=NumberFormat.getCurrencyInstance(locale4);
+System.out.println(numberFormat4.format(pet.price));
+System.out.println("----------------------------------------");
+System.out.println("France Date and Number Formats:");
+System.out.println(pet.petType);
+DateFormat dateFormat5=DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE);
+System.out.println(dateFormat5.format(date));
+Locale locale5=Locale.FRANCE;
+NumberFormat numberFormat5=NumberFormat.getCurrencyInstance(locale5);
+System.out.println(numberFormat5.format(pet.price));
+}
+
+}

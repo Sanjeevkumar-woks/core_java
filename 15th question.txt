@@ -1,0 +1,245 @@
+Pet Class:
+---------
+package com.htc.fifteen;
+
+public class Pet 
+{
+private String petId;
+private String petType;
+private String petDOB;
+private double price;
+private int quantity;
+public String getPetId() {
+	return petId;
+}
+public void setPetId(String petId) {
+	this.petId = petId;
+}
+public String getPetType() {
+	return petType;
+}
+public void setPetType(String petType) {
+	this.petType = petType;
+}
+public String getPetDOB() {
+	return petDOB;
+}
+public void setPetDOB(String petDOB) {
+	this.petDOB = petDOB;
+}
+public double getPrice() {
+	return price;
+}
+public void setPrice(double price) {
+	this.price = price;
+}
+public int getQuantity() {
+	return quantity;
+}
+public void setQuantity(int quantity) {
+	this.quantity = quantity;
+}
+public Pet()
+{
+	
+}
+public Pet(String petId, String petType, String petDOB, double price, int quantity) {
+	super();
+	this.petId = petId;
+	this.petType = petType;
+	this.petDOB = petDOB;
+	this.price = price;
+	this.quantity = quantity;
+}
+@Override
+public String toString() {
+	return "Pet [petId=" + petId + ", petType=" + petType + ", petDOB=" + petDOB + ", price=" + price + ", quantity="
+			+ quantity + "]";
+}
+
+}
+
+Customer Class:
+--------------
+
+package com.htc.fifteen;
+
+public class Customer 
+{
+private int customerId;
+private String customerName;
+public int getCustomerId() {
+	return customerId;
+}
+public void setCustomerId(int customerId) {
+	this.customerId = customerId;
+}
+public String getCustomerName() {
+	return customerName;
+}
+public void setCustomerName(String customerName) {
+	this.customerName = customerName;
+}
+public Customer(int customerId, String customerName) {
+	super();
+	this.customerId = customerId;
+	this.customerName = customerName;
+}
+@Override
+public String toString() {
+	return "Customer [customerId=" + customerId + ", customerName=" + customerName + "]";
+}
+
+}
+
+IStoreServiceProvider interface:
+-------------------------------
+
+package com.htc.fifteen;
+
+import java.util.List;
+
+public interface IStoreServiceProvider 
+{
+public List<Pet> addPets();
+public Pet searchPet(String petType);
+public boolean updatePet(String existingPetType);
+public boolean sellPets(int customerId);
+}
+
+Main Class:
+----------
+
+package com.htc.fifteen;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class Main implements IStoreServiceProvider
+{
+static List<Pet> list=new ArrayList<Pet>();
+static List<Pet> a=new ArrayList<>();
+static Map<Integer, List<Pet>> map=new ConcurrentHashMap<Integer, List<Pet>>();
+static Customer customer=null;
+static Scanner scanner=new Scanner(System.in);	
+public static void main(String[] args) 
+{
+	System.out.println("Enter the customerId to add:");
+	int customerId2=scanner.nextInt();
+	System.out.println("Enter the customerName to add:");
+	String customerName=scanner.next();
+	customer=new Customer(customerId2, customerName);
+    int customerId=customer.getCustomerId();
+    Main main=new Main();
+    List<Pet> list=main.addPets();
+    System.out.println("available pets in petstore are "+list);
+    System.out.println("Enter petType to be searched:");
+    String petType=scanner.next();
+    Pet pet=main.searchPet(petType);
+    System.out.println("Pet is available in PetStore: "+pet);
+    System.out.println("Enter the existing petType to be updated in petStore:");
+    String existingPetType=scanner.next();
+    boolean updateStatus=main.updatePet(existingPetType);
+    if(updateStatus)
+    {
+    	System.out.println("pets are updated based on petType in petStore successfully");
+    }
+    else
+    {
+    	System.out.println("pets are Not updated based on petType in petStore successfully");
+    }
+	boolean sellingStatus=main.sellPets(customerId);
+	if(sellingStatus)
+	{
+		System.out.println("Pets are Successfully sold to the respective customer: "+customer.getCustomerName());
+	}
+	else
+	{
+		System.out.println("Pets are Not sold to the respective customer");
+	}
+}
+@Override
+public Pet searchPet(String petType)
+{
+	// TODO Auto-generated method stub
+	Pet pet=null;
+	for(int index=0;index<list.size();index++)
+	{
+		if(list.get(index).getPetType().equalsIgnoreCase(petType))
+		{
+			pet=list.get(index);
+		}
+	}
+	return pet;
+}
+@Override
+public List<Pet> addPets()
+{
+	// TODO Auto-generated method stub
+	list.add(new Pet("1", "rabbits", "2018-09-09", 9000.0, 9));
+	list.add(new Pet("2", "dogs", "2018-09-19", 8900.0, 19));
+	list.add(new Pet("3", "cats", "2019-09-09", 1900.0, 5));
+	return list;
+}
+@Override
+public boolean updatePet(String existingPetType)
+{
+	// TODO Auto-generated method stub
+	boolean status=false;
+	System.out.println("Enter the new petType to be updated in petStore:");
+	String petType=scanner.next();
+	for(int index=0;index<list.size();index++)
+	{
+		if(list.get(index).getPetType().equalsIgnoreCase(existingPetType))
+		{
+			list.get(index).setPetType(petType);
+			status=true;
+		}
+	}
+	return status;
+}
+@Override
+public boolean sellPets(int customerId)
+{
+	// TODO Auto-generated method stub
+	boolean status=false;	
+	System.out.println("Enter Number of pets does customer requires to purchase:");
+	int size=scanner.nextInt();
+	for(int index=0;index<size;index++)
+	{
+		System.out.println("Enter The PetType from PetStore:");
+		String petType=scanner.next();
+		System.out.println("Enter The PetQuantity from PetStore:");
+		int quantity=scanner.nextInt();
+		for(int index2=0;index2<list.size();index2++)
+		{
+			if(list.get(index2).getPetType().equalsIgnoreCase(petType)&&(quantity<=list.get(index2).getQuantity()))
+			{
+				list.get(index2).setQuantity(quantity);
+				a.add(list.get(index2));
+				status=true;
+			}
+		}
+		map.put(customer.getCustomerId(), a);
+	}
+	for(Map.Entry<Integer, List<Pet>> entry:map.entrySet())
+	{
+		System.out.println("customer id to sell pets:"+entry.getKey());
+		System.out.println(entry.getValue());
+		double totalBill=0.0;
+		System.out.println("Total Bill");
+		for(int index=0;index<a.size();index++)
+		{
+		double bill=entry.getValue().get(index).getQuantity()*entry.getValue().get(index).getPrice();
+		System.out.println("PetType: "+entry.getValue().get(index).getPetType());
+		System.out.println("Bill based on petType is: "+bill);
+		totalBill=totalBill+bill;
+		}
+		System.out.println("Total Purcahed Pets Bill was: "+totalBill);
+	}
+	return status;
+}
+}

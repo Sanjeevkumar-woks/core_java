@@ -1,0 +1,27 @@
+JavaPetShop Class:
+-----------------
+package com.htc.problem24;
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+public class JavaPetShop 
+{
+public static void main(String[] args) 
+{
+Locale locale=Locale.FRANCE;	
+ResourceBundle resourceBundle=ResourceBundle.getBundle("ApplicationResource", locale);
+System.out.println("Dear "+resourceBundle.getString("customerName")+","); 
+System.out.println();
+DateFormat dateFormat=DateFormat.getDateInstance(DateFormat.LONG, locale);
+Date date=new Date();
+System.out.println("Greeting of the day, we are pleased to inform you that your Pet’s next vaccination date is "+dateFormat.format(date));
+}
+}
+
+ApplicationResources.properties file:
+------------------------------------
+customerName=tarak
+nextVaccinationDate=2020-09-09

@@ -1,0 +1,263 @@
+ConnectDB class:
+---------------
+
+package com.htc.probl26;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class ConnectDB 
+{
+static Connection connection=null;	
+public static Connection getConnection()
+{
+	try
+	{
+		Class.forName("org.postgresql.Driver");
+		connection=DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","9790270846");
+		System.out.println("connnected successfully to the database");
+	} 
+	catch (Exception e)
+	{
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	return connection;
+}
+}
+
+Customer Class:
+--------------
+
+package com.htc.probl26;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.Scanner;
+
+public class Customer 
+{
+static Connection connection;
+static CallableStatement callableStatement;
+static Scanner scanner=new Scanner(System.in);
+public static void main(String[] args) 
+{
+	insertPets();
+	retrievePets();
+	updatePets();
+	purchasePets();
+}
+public static void insertPets()
+{
+	System.out.println("Enter the petId:");
+	String petId=scanner.next();
+	System.out.println("Enter the petType:");
+	String petType=scanner.next();
+	System.out.println("Enter the petDOB:");
+	String petDOB=scanner.next();
+	System.out.println("Enter the petPrice:");
+	double petPrice=scanner.nextDouble();
+	System.out.println("Enter the petQuantity:");
+	int petQuantity=scanner.nextInt();
+try
+{
+	Class.forName("org.postgresql.Driver");
+	connection=ConnectDB.getConnection();
+	callableStatement=connection.prepareCall("{?=call insertpets(?,?,?,?,?)}");
+	callableStatement.registerOutParameter(1, Types.INTEGER);
+	callableStatement.setString(2, petId);
+	callableStatement.setString(3, petType);
+	callableStatement.setString(4, petDOB);
+	callableStatement.setDouble(5, petPrice);
+	callableStatement.setInt(6, petQuantity);
+	callableStatement.execute();
+	int i=callableStatement.getInt(1);
+	if(i>0)
+	{
+		System.out.println("pet successfully inserted in database");
+	}
+	else 
+	{
+		System.out.println("pet not inserted in database");
+	}
+}
+catch (Exception e) 
+{
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
+}
+public static void retrievePets()
+{
+	System.out.println("Enter the petId to be retrieved:");
+	String petId=scanner.next();
+	try 
+	{
+		Class.forName("org.postgresql.Driver");
+		connection=ConnectDB.getConnection();
+		callableStatement=connection.prepareCall("{?=call getPets(?)}");
+		callableStatement.registerOutParameter(1, Types.REF_CURSOR);
+		callableStatement.setString(2, petId);
+		callableStatement.execute();
+		ResultSet resultSet=(ResultSet) callableStatement.getObject(1);
+		while(resultSet.next())
+		{
+			System.out.println("pet is available in petStore");
+			System.out.println(resultSet.getString(1)+" "+resultSet.getString(2)+" "+resultSet.getString(3)+" "+resultSet.getDouble(4)+" "+resultSet.getInt(5));
+		}
+	} 
+	catch (Exception e) 
+	{
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+}
+public static void updatePets()
+{
+	try 
+	{
+		Class.forName("org.postgresql.Driver");
+		connection=ConnectDB.getConnection();
+		callableStatement=connection.prepareCall("{?=call updatePets(?,?)}");
+		System.out.println("updating petQuantity based on petType:");
+		System.out.println("Enter the petType:");
+		String petType=scanner.next();
+		System.out.println("Enter the petQuantity:");
+		int petQuantity=scanner.nextInt();
+		callableStatement.registerOutParameter(1, Types.INTEGER);
+		callableStatement.setString(2, petType);
+		callableStatement.setInt(3, petQuantity);
+		callableStatement.execute();
+		int output=callableStatement.getInt(1);
+		if(output>0)
+		{
+			System.out.println("Pet was successfully updated");
+		}
+	} 
+	catch (Exception e) 
+	{
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+}
+public static void purchasePets()
+{
+	System.out.println("Enter the customer Id:");
+	String customerId=scanner.next();
+	System.out.println("Enter the customerName:");
+	String customerName=scanner.next();
+	System.out.println("Enter the petType to be purchased:");
+	String petType=scanner.next();
+	System.out.println("Enter the petQuantity to be purchased:");
+	int petQuantity=scanner.nextInt();
+	try 
+	{
+		Class.forName("org.postgresql.Driver");
+		connection=ConnectDB.getConnection();
+		callableStatement=connection.prepareCall("{?=call purchasePets(?,?,?,?)}");
+		callableStatement.registerOutParameter(1, Types.INTEGER);
+		callableStatement.setString(2, customerId);
+		callableStatement.setString(3, customerName);
+		callableStatement.setString(4, petType);
+		callableStatement.setInt(5, petQuantity);
+		callableStatement.execute();
+		int output=callableStatement.getInt(1);
+		if(output==1)
+		{
+			System.out.println("pet was successfully sold");
+		}
+		else if(output==2)
+		{
+			System.out.println("pet was successfully sold and no pets are available in petStore");
+		}
+		else
+		{
+			System.out.println("insufficient data given to database");
+		}
+	} 
+	catch (Exception e) 
+	{
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+}
+}
+
+Postgresql functions:
+--------------------
+
+//Insertion
+create or replace function insertpets(pet_id varchar(5), pet_type varchar(100), pet_dob varchar(10), pet_price NUMERIC(10), pet_quantity NUMERIC(1000))
+RETURNS INTEGER
+as
+$body$
+declare
+i integer:=0;
+begin
+insert into pet_sample values(pet_id,pet_type,pet_dob,pet_price,pet_quantity);
+i:=1;
+RETURN i;
+END;
+$body$
+language 'plpgsql';
+
+//Updation
+create or replace function updatePets(petId2 varchar(3), petType2 varchar(50))
+RETURNS INTEGER
+as
+$body$
+declare
+i integer:=0;
+begin
+update pet_sample set pet_type=petType2 where pet_id=petId2;
+i:=1;
+RETURN i;
+END;
+$body$
+language 'plpgsql';
+
+//Reading
+CREATE OR REPLACE FUNCTION getPets(petType2 varchar(50), mycurs OUT refcursor) RETURNS refcursor 
+	AS $$
+	BEGIN 
+		OPEN mycurs FOR select * from pet_sample where pet_type=petType2;
+	END;
+	$$
+	LANGUAGE plpgsql;
+
+//Deletion
+create or replace function purchasePets(customerId2 varchar(3), customerName2 varchar(100),petType2 varchar(100), petQuantity2 numeric(1000))
+returns integer
+as
+$body$
+declare 
+i integer:=0;
+pet_quant numeric:=0;
+petPrice2 numeric:=0.0;
+total_Bill numeric:=0.0;
+begin
+select pet_quantity into pet_quant
+from pet_sample
+where pet_type=petType2;
+select pet_price into petPrice2
+from pet_sample
+where pet_type=petType2;
+pet_quant:=pet_quant-petQuantity2;
+total_Bill:=petQuantity2*petPrice2;
+if(pet_quant>0)
+then
+update pet_sample set pet_quantity=pet_quant where pet_type=petType2;
+insert into customer values(customerId2, customerName2, petType2, petQuantity2, petPrice2, total_Bill);
+i:=1;
+else
+delete from pet_sample where pet_type=petType2;
+i:=2;
+END if;
+RETURN i;
+END;
+$body$
+language 'plpgsql';

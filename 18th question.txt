@@ -1,0 +1,70 @@
+EmailValidation Class:
+---------------------
+package com.htc.problem18;
+
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class EmailValidation 
+{
+static Scanner scanner=new Scanner(System.in);
+public static void main(String[] args) 
+{
+String regex="^[a-zA-Z0-9_]+[_]([a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.[a-z0-9]+)*\\.[a-z]+{1,}[mn]$";	
+Pattern pattern=Pattern.compile(regex);	
+System.out.println("Enter the email for validation:");
+String email=scanner.next();
+if(email.length()>10&&email.length()<30)
+{
+Matcher matcher=pattern.matcher(email);
+boolean status=matcher.matches();
+if(status)
+{
+	System.out.println("entered mail is a valid");
+}
+else
+{
+	System.out.println("entered mail is not valid");
+}
+}
+else
+{
+	System.out.println("entered mail is exceeding limit(10to30)");
+}
+}
+}
+
+Validatingsms Class:
+-------------------
+
+package com.htc.problem18;
+
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Validatingsms 
+{
+static Scanner scanner=new Scanner(System.in);	
+public static void main(String[] args) 
+{
+String regex="^\\S[a-zA-Z0-9]+[,]+([a-zA-Z0-9]+)*\\.$";
+System.out.println("Enter sms which was Generated:");
+String sms=scanner.next();
+if(sms.length()<100)
+{
+	Pattern pattern=Pattern.compile(regex);
+	Matcher matcher=pattern.matcher(sms);
+	boolean status=matcher.matches();
+	if(status)
+	{
+		System.out.println("Generated sms Validation is successfull");
+	}
+	else
+	{
+		System.out.println("Generated sms Validation not successfull");
+	}
+}
+}
+}

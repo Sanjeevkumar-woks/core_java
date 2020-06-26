@@ -1,0 +1,222 @@
+Pet Class:
+---------
+
+package com.htc.problem17;
+
+public class Pet
+{
+private String petId;
+private String petType;
+private String petDOB;
+private double price;
+private int quantity;
+public String getPetId() {
+	return petId;
+}
+public void setPetId(String petId) {
+	this.petId = petId;
+}
+public String getPetType() {
+	return petType;
+}
+public void setPetType(String petType) {
+	this.petType = petType;
+}
+public String getPetDOB() {
+	return petDOB;
+}
+public void setPetDOB(String petDOB) {
+	this.petDOB = petDOB;
+}
+public double getPrice() {
+	return price;
+}
+public void setPrice(double price) {
+	this.price = price;
+}
+public int getQuantity() {
+	return quantity;
+}
+public void setQuantity(int quantity) {
+	this.quantity = quantity;
+}
+public Pet()
+{
+	
+}
+public Pet(String petId, String petType, String petDOB, double price, int quantity) {
+	super();
+	this.petId = petId;
+	this.petType = petType;
+	this.petDOB = petDOB;
+	this.price = price;
+	this.quantity = quantity;
+}
+@Override
+public String toString() {
+	return "Pet [petId=" + petId + ", petType=" + petType + ", petDOB=" + petDOB + ", price=" + price + ", quantity="
+			+ quantity + "]";
+}
+
+@Override
+public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((petDOB == null) ? 0 : petDOB.hashCode());
+	result = prime * result + ((petId == null) ? 0 : petId.hashCode());
+	result = prime * result + ((petType == null) ? 0 : petType.hashCode());
+	long temp;
+	temp = Double.doubleToLongBits(price);
+	result = prime * result + (int) (temp ^ (temp >>> 32));
+	result = prime * result + quantity;
+	return result;
+}
+@Override
+public boolean equals(Object obj) {
+	if (this == obj)
+		return true;
+	if (obj == null)
+		return false;
+	if (getClass() != obj.getClass())
+		return false;
+	Pet other = (Pet) obj;
+	if (petDOB == null) {
+		if (other.petDOB != null)
+			return false;
+	} else if (!petDOB.equals(other.petDOB))
+		return false;
+	if (petId == null) {
+		if (other.petId != null)
+			return false;
+	} else if (!petId.equals(other.petId))
+		return false;
+	if (petType == null) {
+		if (other.petType != null)
+			return false;
+	} else if (!petType.equals(other.petType))
+		return false;
+	if (Double.doubleToLongBits(price) != Double.doubleToLongBits(other.price))
+		return false;
+	if (quantity != other.quantity)
+		return false;
+	return true;
+}
+}
+
+PetTypeComparator Class:
+-----------------------
+
+package com.htc.problem17;
+
+import java.util.Comparator;
+
+public class PetTypeComparator implements Comparator<Pet>
+{
+
+	@Override
+	public int compare(Pet pet1, Pet pet2)
+	{
+		// TODO Auto-generated method stub
+		return pet1.getPetType().compareTo(pet2.getPetType());
+	}
+	
+}
+
+PetDOBComparator Class:
+----------------------
+
+package com.htc.problem17;
+
+import java.util.Comparator;
+
+public class PetDOBComparator implements Comparator<Pet>
+{
+
+	@Override
+	public int compare(Pet o1, Pet o2) 
+	{
+		// TODO Auto-generated method stub
+		return o1.getPetDOB().compareTo(o2.getPetDOB());
+	}
+
+}
+
+PetPriceComparator Class:
+------------------------
+
+package com.htc.problem17;
+
+import java.util.Comparator;
+
+public class PetPriceComparator implements Comparator<Pet> {
+
+	@Override
+	public int compare(Pet o1, Pet o2)
+	{
+		// TODO Auto-generated method stub
+		return new Double(o1.getPrice()).compareTo(new Double(o2.getPrice()));
+	}
+
+}
+
+PetQuantityComparator Class:
+---------------------------
+
+package com.htc.problem17;
+
+import java.util.Comparator;
+
+public class PetQuantityComparator implements Comparator<Pet>
+{
+
+	@Override
+	public int compare(Pet o1, Pet o2) 
+	{
+		// TODO Auto-generated method stub
+		return new Integer(o1.getQuantity()).compareTo(new Integer(o2.getQuantity()));
+	}
+
+}
+
+Main Class:
+----------
+
+package com.htc.problem17;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Main 
+{
+public static void main(String[] args) 
+{
+	List<Pet> list=new ArrayList<>();
+	list.add(new Pet("1","cats","2018-09-09",9000.0,9));
+	list.add(new Pet("2","dogs","2016-09-09",19000.0,5));
+    list.add(new Pet("3", "rabbits", "2018-09-19", 9800.0, 19));
+    Collections.sort(list, new PetTypeComparator());
+    for (Pet pet : list) 
+    {
+		System.out.println(pet);
+	}
+    System.out.println("-------------------------");
+    Collections.sort(list, new PetDOBComparator());
+    for (Pet pet : list) 
+    {
+		System.out.println(pet);
+	}
+    System.out.println("-------------------------");
+    Collections.sort(list, new PetPriceComparator());
+    for (Pet pet : list) 
+    {
+		System.out.println(pet);
+	}
+    System.out.println("-------------------------");
+    Collections.sort(list, new PetQuantityComparator());
+    for (Pet pet : list) 
+    {
+		System.out.println(pet);
+	}
+}
+}

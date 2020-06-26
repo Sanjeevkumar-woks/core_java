@@ -1,0 +1,183 @@
+ConnectDB class:
+---------------
+
+package com.htc.probl26;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class ConnectDB 
+{
+static Connection connection=null;	
+public static Connection getConnection()
+{
+	try
+	{
+		Class.forName("org.postgresql.Driver");
+		connection=DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","9790270846");
+		System.out.println("connnected successfully to the database");
+	} 
+	catch (Exception e)
+	{
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	return connection;
+}
+}
+
+Orders class:
+------------
+
+package com.htc.probl27;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.Types;
+import java.util.Scanner;
+
+import javax.sql.rowset.WebRowSet;
+
+import com.htc.probl26.ConnectDB;
+
+public class Orders 
+{
+static Scanner scanner=new Scanner(System.in);	
+static CallableStatement callableStatement;
+static Connection connection;
+static WebRowSet webRowSet=new WebRowSetImpl();
+public static void main(String[] args) 
+{
+try
+{	
+	//Insertion
+	Class.forName("org.postgresql.Driver");
+	Connection connection=ConnectDB.getConnection();
+	CallableStatement callableStatement=connection.prepareCall("?=call insertpets(?,?,?,?,?)");
+	callableStatement.registerOutParameter(1, Types.INTEGER);
+	callableStatement.setString(2, "4");
+	callableStatement.setString(3, "rabbits");
+	callableStatement.setString(4, "2018-09-29");
+	callableStatement.setDouble(5, 9900.0);
+	callableStatement.setInt(6, 9);
+	callableStatement.execute();
+	System.out.println("successfully inserted");
+	
+	//Selection	
+	webRowSet.setUrl("jdbc:postgresql://localhost:5432/postgres");
+	webRowSet.setUsername("postgres");
+	webRowSet.setPassword("9790270846");
+	webRowSet.setCommand("select * from pet_sample");
+	webRowSet.execute();
+	while(webRowSet.next())
+	{
+		System.out.println(webRowSet.getString(1)+" "+webRowSet.getString(2)+" "+webRowSet.getString(3)+" "+webRowSet.getString(4)+" "+webRowSet.getString(5));
+	}
+	webRowSet.close();
+	
+	//Updation
+	callableStatement=connection.prepareCall("?=call updatePets(?,?)");
+	callableStatement.registerOutParameter(1, Types.INTEGER);
+	callableStatement.setString(2, "4");
+	callableStatement.setString(3, "fishes");
+	callableStatement.execute();
+	System.out.println("successfully updated");
+	
+	//Deletion
+	System.out.println("Enter the customerId:");
+	String customerId=scanner.next();
+	System.out.println("Enter the customerName:");
+	String customerName=scanner.next();
+	System.out.println("enter the number of orders to be placed by customer:");
+	int numberOfPets=scanner.nextInt();
+	for(int index=1;index<=numberOfPets;index++)
+	{
+	System.out.println("Enter the petType:");
+	String petType=scanner.next();
+	System.out.println("Enter the petQuantity:");
+	int petQuantity=scanner.nextInt();
+	callableStatement=connection.prepareCall("?=call purchasePets(?,?,?,?)");
+	callableStatement.registerOutParameter(1, Types.INTEGER);
+	callableStatement.setString(2, customerId);
+	callableStatement.setString(3, customerName);
+	callableStatement.setString(4, petType);
+	callableStatement.setInt(5, petQuantity);
+	callableStatement.execute();
+	System.out.println("successfully purchased");
+	}
+}
+catch (Exception e) 
+{
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
+}
+}
+
+Postgresql functions:
+--------------------
+
+//Insertion
+create or replace function insertpets(pet_id varchar(5), pet_type varchar(100), pet_dob varchar(10), pet_price NUMERIC(10), pet_quantity NUMERIC(1000))
+RETURNS INTEGER
+as
+$body$
+declare
+i integer:=0;
+begin
+insert into pet_sample values(pet_id,pet_type,pet_dob,pet_price,pet_quantity);
+i:=1;
+RETURN i;
+END;
+$body$
+language 'plpgsql';
+
+
+//Updation
+create or replace function updatePets(petId2 varchar(3), petType2 varchar(50))
+RETURNS INTEGER
+as
+$body$
+declare
+i integer:=0;
+begin
+update pet_sample set pet_type=petType2 where pet_id=petId2;
+i:=1;
+RETURN i;
+END;
+$body$
+language 'plpgsql';
+
+
+//Deletion
+create or replace function purchasePets(customerId2 varchar(3), customerName2 varchar(100),petType2 varchar(100), petQuantity2 numeric(1000))
+returns integer
+as	
+$body$
+declare 
+i integer:=0;
+pet_quant numeric:=0;
+petPrice2 numeric:=0.0;
+total_Bill numeric:=0.0;
+begin
+select pet_quantity into pet_quant
+from pet_sample
+where pet_type=petType2;
+select pet_price into petPrice2
+from pet_sample
+where pet_type=petType2;
+pet_quant:=pet_quant-petQuantity2;
+total_Bill:=petQuantity2*petPrice2;
+if(pet_quant>0)
+then
+update pet_sample set pet_quantity=pet_quant where pet_type=petType2;
+insert into customer values(customerId2, customerName2, petType2, petQuantity2, petPrice2, total_Bill);
+i:=1;
+else
+delete from pet_sample where pet_type=petType2;
+i:=2;
+END if;
+RETURN i;
+END;
+$body$
+language 'plpgsql';

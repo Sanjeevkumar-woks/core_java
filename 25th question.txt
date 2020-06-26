@@ -1,0 +1,64 @@
+servicetable:
+------------
+CREATE TABLE service(service_id VARCHAR(3), service_description VARCHAR(50), price NUMERIC(5));
+
+Main class:
+----------
+
+package com.htc.probl25;
+
+import java.io.FileReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.util.Properties;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
+public class Main 
+{
+public static void main(String[] args) throws EmptyFileException
+{
+try
+{
+	//creating the logger file 
+	Logger logger=Logger.getLogger("Main");
+	FileHandler fileHandler=new FileHandler("logdemo.txt", 2000, 1);	
+	fileHandler.setLevel(Level.ALL);
+	//setting the format for logger file
+	fileHandler.setFormatter(new SimpleFormatter());
+	logger.addHandler(fileHandler);
+	//setting the level of error
+	logger.warning("Warning");
+	//creating the properties file 
+	FileReader fileReader=new FileReader("ServiceFile.properties");
+	//creating properties object inorder to call the data present in the properties file
+	Properties properties=new Properties();
+	properties.load(fileReader);
+	
+	//establishing database connection
+	Class.forName("org.postgresql.Driver");
+	Connection connection=DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","9790270846");
+	PreparedStatement preparedStatement=connection.prepareStatement("insert into service values(?,?,?)");
+	//Getting the data from the properties file by using getProperty(key)
+	preparedStatement.setString(1, properties.getProperty("serviceId"));
+	preparedStatement.setString(2, properties.getProperty("serviceDescription"));
+	preparedStatement.setDouble(3, Double.parseDouble(properties.getProperty("price")));
+	preparedStatement.executeUpdate();
+	System.out.println("successfully inserted into the database");
+	logger.warning("successfully inserted into the database");
+	
+} 
+catch (Exception e) 
+{
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
+
+}
+}
+
+
+

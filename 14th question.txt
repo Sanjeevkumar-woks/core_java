@@ -1,0 +1,429 @@
+Pet Class:
+--------
+
+package com.htc.collectionquestions;
+
+public class Pet 
+{
+private String petId;
+private String petType;
+private String petDOB;
+private double price;
+private int quantity;
+public String getPetId() {
+	return petId;
+}
+public void setPetId(String petId) {
+	this.petId = petId;
+}
+public String getPetType() {
+	return petType;
+}
+public void setPetType(String petType) {
+	this.petType = petType;
+}
+public String getPetDOB() {
+	return petDOB;
+}
+public void setPetDOB(String petDOB) {
+	this.petDOB = petDOB;
+}
+public double getPrice() {
+	return price;
+}
+public void setPrice(double price) {
+	this.price = price;
+}
+public int getQuantity() {
+	return quantity;
+}
+public void setQuantity(int quantity) {
+	this.quantity = quantity;
+}
+public Pet()
+{
+	
+}
+public Pet(String petId, String petType, String petDOB, double price, int quantity) {
+	super();
+	this.petId = petId;
+	this.petType = petType;
+	this.petDOB = petDOB;
+	this.price = price;
+	this.quantity = quantity;
+}
+@Override
+public String toString() {
+	return "Pet [petId=" + petId + ", petType=" + petType + ", petDOB=" + petDOB + ", price=" + price + ", quantity="
+			+ quantity + "]";
+}
+
+}
+
+PetStore Class:
+--------------
+
+package com.htc.collectionquestions;
+
+import java.util.List;
+
+public class PetStore 
+{
+private String storeId;
+private String storeName;
+private String address;
+private List<Pet> pet;
+public String getStoreId() {
+	return storeId;
+}
+public void setStoreId(String storeId) {
+	this.storeId = storeId;
+}
+public String getStoreName() {
+	return storeName;
+}
+public void setStoreName(String storeName) {
+	this.storeName = storeName;
+}
+public String getAddress() {
+	return address;
+}
+public void setAddress(String address) {
+	this.address = address;
+}
+public List<Pet> getPet() {
+	return pet;
+}
+public void setPet(List<Pet> pet) {
+	this.pet = pet;
+}
+
+public PetStore(String storeId, String storeName, String address, List<Pet> pet) {
+	super();
+	this.storeId = storeId;
+	this.storeName = storeName;
+	this.address = address;
+	this.pet = pet;
+}
+@Override
+public String toString() {
+	return "PetStore [storeId=" + storeId + ", storeName=" + storeName + ", address=" + address + ", pet=" + pet + "]";
+}
+
+}
+
+IStoreServiceProvider Interface:
+-------------------------------
+
+package com.htc.collectionquestions;
+
+import java.util.List;
+
+public interface IStoreServiceProvider 
+{
+	
+public Pet searchPet(String petId);
+
+public List<Pet> addPets();
+
+public boolean updatePet();
+
+public boolean sellPet(String petId, int quantity);
+
+}
+
+Main Class: (This Class Consists of All Crud Operations, done using List interface)
+----------
+
+package com.htc.collectionquestions;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main implements IStoreServiceProvider
+{
+static Scanner scanner=new Scanner(System.in);
+static PetStore petStore=new PetStore("1", "abcde", "Hyderabad", null);
+static ArrayList<Pet> arrayList=new ArrayList<Pet>();
+public static void main(String[] args) 
+{
+arrayList.add(new Pet("1","cats","2018-09-09",9000.0,9));
+arrayList.add( new Pet("2","dogs", "2019-09-19",8000.0,5));
+petStore.setPet(arrayList);
+String ch="yes";
+do
+{	
+System.out.println("1 for inserting the Pets:");
+System.out.println("2 for Searching the Pet:");
+System.out.println("3 for updating the petDetails:");
+System.out.println("4 for selling(delete) the pet:");
+System.out.println("Enter your choice:");
+int choice=scanner.nextInt();
+Main main=new Main();
+switch(choice)
+{
+case 1:
+	ArrayList<Pet> pet=main.addPets();
+	System.out.println("Pets Added Successfully in PetStore");
+	System.out.println("Available Pets in PetStore are:"+pet);
+	break;
+case 2:
+	System.out.println("Enter the petType:");
+	String petType=scanner.next();
+	Pet pet2=main.searchPet(petType);
+	if(pet2==null)
+	{
+		System.out.println("Pet was Not Available in PetStore");
+	}
+	else
+	{
+	System.out.println("Pet Was Available in PetStore:"+pet2);
+	}
+	break;
+case 3:
+	boolean status=main.updatePet();
+	if(status)
+	{
+		System.out.println("Updated Successfully");
+	}
+	else
+	{
+		System.out.println("Pet Details Were Not Found");
+	}
+	break;
+case 4:
+	System.out.println("Enter the PetType to sell");
+	String petType2=scanner.next();
+	System.out.println("Enter the Quantity to sell");
+	int quantity=scanner.nextInt();
+	boolean status2=main.sellPet(petType2,quantity);
+	if(status2)
+	{
+		System.out.println("Sold Successfully");
+	}
+	else
+	{
+		System.out.println("Not sufficient Pets are avalilable in petStore");
+		System.out.println("Pet Has Not Sold");
+	}
+	break;
+default:
+	System.out.println("Invalid selection");
+}
+System.out.println("Do You Wish To continue the Process:");
+System.out.println("Yes For continue The Process");
+System.out.println("No For stopping The Process");
+System.out.println("Enter Your Selection Of Process:");
+ch=scanner.next();
+}while(ch.equalsIgnoreCase("yes"));
+System.out.println("Thank You Visit Us Again");
+}
+public ArrayList<Pet> addPets()
+{
+	System.out.println("Enter the Number Of Pets:");
+	int size=scanner.nextInt();
+	for(int index=0;index<size;index++)
+	{
+		System.out.println("Enter The Pet Id:");
+		String petId=scanner.next();
+		System.out.println("Enter The Pet Type:");
+		String petType=scanner.next();
+		System.out.println("Enter The Pet DOB:");
+		String petDOB=scanner.next();
+		System.out.println("Enter The Pet Price:");
+		double petPrice=scanner.nextDouble();
+		System.out.println("Enter The Pet Quantity:");
+		int petQuantity=scanner.nextInt();
+		arrayList.add(new Pet(petId, petType, petDOB, petPrice, petQuantity));
+	}
+	petStore.setPet(arrayList);
+	return arrayList;
+}
+public Pet searchPet(String petType)
+{
+	Pet pet=null;
+	for(int index=0;index<arrayList.size();index++)
+	{
+		if(petStore.getPet().get(index).getPetType().equalsIgnoreCase(petType))
+		{
+			pet=petStore.getPet().get(index);
+			break;
+		}
+	}
+	return pet;
+}
+public boolean updatePet()
+{
+	boolean status=false;
+	// TODO Auto-generated method stub
+	String choice;
+	do 
+	{
+		System.out.println("1 for updatePetBasedOnPetType:");
+		System.out.println("2 for updatePetBasedOnPetPrice:");
+		System.out.println("3 for updatePetBasedOnPetQuantity:");
+		System.out.println("Enter your selection:");
+		int ch=scanner.nextInt();
+		boolean status1=false;
+		switch(ch)
+		{
+		case 1:
+			System.out.println("Enter the old PetType For Updation:");
+			String petType1=scanner.next();
+			status1=upadatePetType(petType1);
+			if(status1)
+			{
+				status=true;
+			}
+			else
+			{
+				status=false;
+			}
+			break;
+		case 2:
+			System.out.println("Enter the existing Pet Type in Pet Store:");
+			String petType2=scanner.next();
+			status1=updatePetPrice(petType2);
+			if(status1)
+			{
+				status=true;
+			}
+			else
+			{
+				status=false;
+			}
+			break;
+		case 3:
+			System.out.println("Enter the existing Pet Type in Pet Store:");
+			String petType3=scanner.next();
+			status1=updatePetQuantity(petType3);
+			if(status1)
+			{
+				status=true;
+			}
+			else
+			{
+				status=false;
+			}
+			break;
+		default:
+			System.out.println("Invalid Choice:");
+		}
+		System.out.println("Do you wish to update other details of the pet:");
+		System.out.println("Yes to continue:");
+		System.out.println("No to stop:");
+		System.out.println("Enter your choice:");
+		choice=scanner.next();
+	}while(choice.equalsIgnoreCase("yes"));
+	
+	return status;
+}
+public  boolean updatePetQuantity(String petType3)
+{
+	// TODO Auto-generated method stub
+	boolean status=false;
+	System.out.println("Enter Quantity To Be Updated:");
+	int quantity=scanner.nextInt();
+	for(int index=0;index<arrayList.size();index++)
+	{
+		if(arrayList.get(index).getPetType().equalsIgnoreCase(petType3))
+		{
+			arrayList.get(index).setQuantity(quantity);
+			petStore.setPet(arrayList);
+			System.out.println("Updated Pet Details are:"+arrayList.get(index));
+			status=true;
+			break;
+		}
+		else
+		{
+			status=false;
+		}
+	}
+	return status;
+}
+public boolean updatePetPrice(String petType2)
+{
+	// TODO Auto-generated method stub
+	boolean status=false;
+	System.out.println("Enter Price To Be Updated:");
+	double petPrice=scanner.nextDouble();
+	for(int index=0;index<arrayList.size();index++)
+	{
+		if(arrayList.get(index).getPetType().equalsIgnoreCase(petType2))
+		{
+			arrayList.get(index).setPrice(petPrice);
+			petStore.setPet(arrayList);
+			System.out.println("Updated Pet Details are:"+arrayList.get(index));
+			status=true;
+			break;
+		}
+		else
+		{
+			status=false;
+		}
+	}
+	return status;
+}
+public boolean upadatePetType(String petType1)
+{
+	// TODO Auto-generated method stub
+	boolean status=false;
+	System.out.println("Enter New PetType To Be Updated:");
+	String petType2=scanner.next();
+	for(int index=0;index<arrayList.size();index++)
+	{
+		if(arrayList.get(index).getPetType().equalsIgnoreCase(petType1))
+		{
+			arrayList.get(index).setPetType(petType2);
+			petStore.setPet(arrayList);
+			System.out.println("Updated Pet Details are:"+arrayList.get(index));
+			status=true;
+			break;
+		}
+		else
+		{
+			status=false;
+		}
+	}
+	return status;
+}
+public boolean sellPet(String petType2, int quantity) 
+{
+	// TODO Auto-generated method stub
+	boolean status=false;
+	for(int index=0;index<arrayList.size();index++)
+	{
+		int remainingQuantity=arrayList.get(index).getQuantity()-quantity;
+		if(arrayList.get(index).getPetType().equalsIgnoreCase(petType2)&&(remainingQuantity>=0))
+		{
+			arrayList.get(index).setQuantity(remainingQuantity);
+			
+			System.out.println("Total Bill:");
+			double totalPrice=quantity*arrayList.get(index).getPrice();
+			System.out.println("Ordered Pet Type is:"+petType2);
+			System.out.println("Ordered Quantity of Pets are:"+quantity);
+			System.out.println("Price per Each Pet is:"+arrayList.get(index).getPrice());
+			System.out.println("Total Price of Order is:"+totalPrice);
+			if(remainingQuantity==0)
+			{
+			arrayList.remove(arrayList.get(index));
+			System.out.println("There are No Pets Of petType "+petType2 +" Remaining in PetStore, All Pets are sold out");
+			status=true;
+			break;
+			}
+			if(remainingQuantity>0)
+			{
+				arrayList.get(index).setQuantity(remainingQuantity);
+				System.out.println("Remaining Pets Of this PetType: "+petType2+" are "+remainingQuantity);
+				status=true;
+				break;
+			}
+		}
+		else
+		{
+			status=false;
+		}
+	}
+	return status;
+}
+}

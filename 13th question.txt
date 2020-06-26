@@ -1,0 +1,206 @@
+Completed watching Exception videos and done with the 13th question
+
+
+Pet class:
+---------
+
+package com.htc.exception;
+
+public class Pet 
+{
+private String petId;
+private String petType;
+private String petDOB;
+private double price;
+private int quantity;
+public String getPetId() {
+	return petId;
+}
+public void setPetId(String petId) {
+	this.petId = petId;
+}
+public String getPetType() {
+	return petType;
+}
+public void setPetType(String petType) {
+	this.petType = petType;
+}
+public String getPetDOB() {
+	return petDOB;
+}
+public void setPetDOB(String petDOB) {
+	this.petDOB = petDOB;
+}
+public double getPrice() {
+	return price;
+}
+public void setPrice(double price) {
+	this.price = price;
+}
+public int getQuantity() {
+	return quantity;
+}
+public void setQuantity(int quantity) {
+	this.quantity = quantity;
+}
+public Pet()
+{
+	
+}
+public Pet(String petId, String petType, String petDOB, double price, int quantity) {
+	super();
+	this.petId = petId;
+	this.petType = petType;
+	this.petDOB = petDOB;
+	this.price = price;
+	this.quantity = quantity;
+}
+@Override
+public String toString() {
+	return "Pet [petId=" + petId + ", petType=" + petType + ", petDOB=" + petDOB + ", price=" + price + ", quantity="
+			+ quantity + "]";
+}
+
+}
+
+PetNotFoudException Class:
+-------------------------
+
+package com.htc.exception;
+
+public class PetNotFoundException extends Exception
+{
+		
+		//parameterized constructor
+		public PetNotFoundException(String strmsg)
+		{
+			super(strmsg); //invoking exception class constructor along with exception message
+		}
+		
+
+}
+
+InsufficientPetException Class:
+------------------------------
+
+package com.htc.exception;
+
+public class InsufficientPetException extends Exception
+{
+
+	//parameterized constructor
+	public InsufficientPetException(String strmsg)
+	{
+		super(strmsg); //invoking exception class constructor along with exception message
+	}
+
+}
+
+IStoreServiceProvider Interface:
+-------------------------------
+
+package com.htc.exception;
+
+public interface IStoreServiceProvider
+{
+	public boolean searchPetBasedOnPetType();
+	public boolean checkForQuantity();
+}
+
+
+Main Class:
+----------
+
+package com.htc.exception;
+
+import java.util.Scanner;
+
+import com.htc.problem9.Pet;
+
+public class Main implements IStoreServiceProvider
+{
+	static Scanner scanner=new Scanner(System.in);
+	static Pet[] pet= {new Pet("1","cats","2018-09-09",9000.0,9), new Pet("2","dogs","2016-09-09",19000.0,5)};
+	public static void main(String[] args)
+	{
+		System.out.println("1 for searching pet based on pet type:");
+		System.out.println("2 for checking the quantity is available or not:");
+		System.out.println("Enter your choice:");
+		int choice=scanner.nextInt();
+		switch(choice)
+		{
+		case 1:
+			try
+			{
+			Main main=new Main();
+			boolean searchingStatus=main.searchPetBasedOnPetType();
+			if(searchingStatus)
+			{
+				System.out.println("Pet is available in petStore:");
+			}
+			else
+			{
+				throw new PetNotFoundException("PetNotFound");
+			}
+			}
+			catch(PetNotFoundException pnfe)
+			{
+				System.out.println(pnfe);
+			}
+			break;
+		case 2:
+			try
+			{
+			Main main=new Main();
+			boolean checkingStatus=main.checkForQuantity();
+			if(checkingStatus)
+			{
+				System.out.println("Pets are available with the requested quantity:");
+			}
+			else
+			{
+				throw new InsufficientPetException("Insufficient Pet in the petStore");
+			}
+			}
+			catch(InsufficientPetException ipe)
+			{
+				System.out.println(ipe);
+			}
+			break;
+		default:
+			System.out.println("Invalid Choice");	
+		}
+		
+	}
+	public boolean searchPetBasedOnPetType()
+	{
+		boolean status=false;
+		System.out.println("Enter the petType:");
+		String petType=scanner.next();
+		for(int index=0;index<pet.length;index++)
+		{
+			if(petType.equalsIgnoreCase(pet[index].getPetType()))
+			{
+				status=true;
+			}
+		}
+		return status;
+	}
+	public boolean checkForQuantity()
+	{
+		boolean status=false;
+		System.out.println("Enter the petId:");
+		String petId2=scanner.next();
+		System.out.println("Enter the quantity:");
+		int quantity=scanner.nextInt();
+		for(int index=0;index<pet.length;index++)
+		{
+			if(petId2.equalsIgnoreCase(pet[index].getPetId())&&(quantity<=pet[index].getQuantity()))
+			{
+				status=true;
+			}
+		}
+		return status;
+	}
+}
+

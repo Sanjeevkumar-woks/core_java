@@ -1,0 +1,291 @@
+Address Class:
+-------------
+
+package com.htc.probl29;
+
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Address implements Serializable
+{
+private String petStoreId;
+private String petStoreName;
+private String streetName;
+private String cityName;
+public String getPetStoreId() {
+	return petStoreId;
+}
+public void setPetStoreId(String petStoreId) {
+	this.petStoreId = petStoreId;
+}
+public String getPetStoreName() {
+	return petStoreName;
+}
+public void setPetStoreName(String petStoreName) {
+	this.petStoreName = petStoreName;
+}
+public String getStreetName() {
+	return streetName;
+}
+public void setStreetName(String streetName) {
+	this.streetName = streetName;
+}
+public String getCityName() {
+	return cityName;
+}
+public void setCityName(String cityName) {
+	this.cityName = cityName;
+}
+public Address(String petStoreId, String petStoreName, String streetName, String cityName) {
+	super();
+	this.petStoreId = petStoreId;
+	this.petStoreName = petStoreName;
+	this.streetName = streetName;
+	this.cityName = cityName;
+}
+@Override
+public String toString() {
+	return "Address [petStoreId=" + petStoreId + ", petStoreName=" + petStoreName + ", streetName=" + streetName
+			+ ", cityName=" + cityName + "]";
+}
+
+}
+
+Pet Class:
+---------
+
+package com.htc.probl29;
+
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Pet implements Serializable
+{
+private String petId;
+private String petType;
+private String petDOB;
+private double price;
+private int quantity;
+public String getPetId() {
+	return petId;
+}
+public void setPetId(String petId) {
+	this.petId = petId;
+}
+public String getPetType() {
+	return petType;
+}
+public void setPetType(String petType) {
+	this.petType = petType;
+}
+public String getPetDOB() {
+	return petDOB;
+}
+public void setPetDOB(String petDOB) {
+	this.petDOB = petDOB;
+}
+public double getPrice() {
+	return price;
+}
+public void setPrice(double price) {
+	this.price = price;
+}
+public int getQuantity() {
+	return quantity;
+}
+public void setQuantity(int quantity) {
+	this.quantity = quantity;
+}
+public Pet()
+{
+	
+}
+public Pet(String petId, String petType, String petDOB, double price, int quantity) {
+	super();
+	this.petId = petId;
+	this.petType = petType;
+	this.petDOB = petDOB;
+	this.price = price;
+	this.quantity = quantity;
+}
+@Override
+public String toString() {
+	return "Pet [petId=" + petId + ", petType=" + petType + ", petDOB=" + petDOB + ", price=" + price + ", quantity="
+			+ quantity + "]";
+}
+public static void main(String[] args) 
+{
+	Pet pet=new Pet();
+	pet.setPetId("1");
+	pet.setPetDOB("2018-09-19");
+	pet.setPetType("rabbits");
+	pet.setPrice(9000.0);
+	pet.setQuantity(9);
+	
+	System.out.println(pet.getPetId());
+	System.out.println(pet.getPetDOB());
+	System.out.println(pet.getPetType());
+	System.out.println(pet.getPrice());
+	System.out.println(pet.getQuantity());
+}
+
+}
+
+PetStore Class:
+--------------
+
+package com.htc.probl29;
+
+import java.io.Serializable;
+import java.util.List;
+
+@SuppressWarnings("serial")
+public class PetStore implements Serializable
+{
+private Address address;
+private List<Pet> pet;
+public Address getAddress() {
+	return address;
+}
+public void setAddress(Address address) {
+	this.address = address;
+}
+public List<Pet> getPet() {
+	return pet;
+}
+public void setPet(List<Pet> pet) {
+	this.pet = pet;
+}
+public PetStore(Address address, List<Pet> pet) {
+	super();
+	this.address = address;
+	this.pet = pet;
+}
+@Override
+public String toString() {
+	return "PetStore [address=" + address + ", pet=" + pet + "]";
+}
+
+}
+
+Main Class:
+----------
+
+package com.htc.probl29;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import com.htc.probl26.ConnectDB;
+
+public class Main 
+{	
+static Scanner scanner=new Scanner(System.in);	
+static PetStore petStore;
+static List<Pet> pet=new ArrayList<Pet>();
+public static void main(String[] args) throws IOException, ClassNotFoundException 
+{
+//storing pet objects into a list	
+List<Pet> pet=new ArrayList<Pet>();
+System.out.println("Enter petStoreId:");
+String petStoreId=scanner.next();
+System.out.println("Enter petStoreName:");
+String petStoreName=scanner.next();
+System.out.println("Enter StreetName:");
+String streetName=scanner.next();
+System.out.println("Enter CityName:");
+String cityName=scanner.next();
+Address address=new Address(petStoreId, petStoreName, streetName, cityName);
+pet.add(new Pet("4","rabbits","2018-09-19",9000.0,9));
+pet.add(new Pet("5","birds","2019-09-09",8900.0,19));
+//storing petslist and address into petStore
+petStore=new PetStore(address, pet);
+System.out.println(petStore);
+
+//performing insert operation
+serializePets();
+
+//performing select operation
+deserializePets();
+}
+public static void serializePets()
+{
+try 
+{
+	FileOutputStream fileOutputStream=new FileOutputStream("PetStore.txt");
+	ObjectOutputStream objectOutputStream=new ObjectOutputStream(fileOutputStream);
+	//storing pet details inside the file
+	objectOutputStream.writeObject(petStore);
+	
+	//storing pet details inside data base using insert query
+	Connection connection=ConnectDB.getConnection();
+	PreparedStatement preparedStatement=connection.prepareStatement("insert into pet_sample values(?,?,?,?,?)");
+	for(int index=0;index<pet.size();index++)
+	{
+	preparedStatement.setString(1, pet.get(index).getPetId());
+	preparedStatement.setString(2, pet.get(index).getPetType());
+	preparedStatement.setString(3, pet.get(index).getPetDOB());
+	preparedStatement.setDouble(4, pet.get(index).getPrice());
+	preparedStatement.setInt(5, pet.get(index).getQuantity());
+	preparedStatement.executeUpdate();
+	System.out.println("pets are successfully inserted into the data base");
+	}
+	objectOutputStream.close();
+	fileOutputStream.close();
+} 
+catch (Exception e)
+{
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
+}
+private static void deserializePets()
+{
+	
+	// TODO Auto-generated method stub
+	FileInputStream fileInputStream=null;
+	ObjectInputStream objectInputStream=null;
+	try 
+	{
+		fileInputStream = new FileInputStream("PetStore.txt");
+		objectInputStream=new ObjectInputStream(fileInputStream);
+		
+		//deserializing pet details from file
+		PetStore petStore2=(PetStore)objectInputStream.readObject();
+		System.out.println(petStore2);
+		
+		//retrieving data from data base using select query
+		String petType="birds";
+		Connection connection=ConnectDB.getConnection();
+		PreparedStatement preparedStatement=connection.prepareStatement("select pet_id, pet_type, pet_dob, pet_price, pet_quantity from pet_sample where pet_type=?");
+		for(int index=0;index<pet.size();index++)
+		{
+		if(petStore2.getPet().get(index).getPetType().equalsIgnoreCase(petType))
+		{
+		preparedStatement.setString(1, petType);
+		ResultSet resultSet=preparedStatement.executeQuery();
+		while(resultSet.next())
+		{
+			System.out.println(resultSet.getString(1)+" "+resultSet.getString(2)+" "+resultSet.getString(3)+" "+resultSet.getString(4)+" "+resultSet.getString(5));
+		}
+		}
+		}
+		objectInputStream.close();
+		fileInputStream.close();
+	}
+	catch (Exception e) 
+	{
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+}
+}

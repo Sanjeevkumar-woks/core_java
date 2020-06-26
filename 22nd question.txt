@@ -1,0 +1,102 @@
+Pet Class:
+---------
+package com.htc.problem22;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Scanner;
+
+public class Pet 
+{
+private String petId;
+private String petType;
+private String petDOB;
+private double price;
+private int quantity;
+private String image;
+public String getPetId() {
+	return petId;
+}
+public void setPetId(String petId) {
+	this.petId = petId;
+}
+public String getPetType() {
+	return petType;
+}
+public void setPetType(String petType) {
+	this.petType = petType;
+}
+public String getPetDOB() {
+	return petDOB;
+}
+public void setPetDOB(String petDOB) {
+	this.petDOB = petDOB;
+}
+public double getPrice() {
+	return price;
+}
+public void setPrice(double price) {
+	this.price = price;
+}
+public int getQuantity() {
+	return quantity;
+}
+public void setQuantity(int quantity) {
+	this.quantity = quantity;
+}
+
+public String getImage() {
+	return image;
+}
+public void setImage(String image) {
+	this.image = image;
+}
+public Pet()
+{
+	
+}
+
+public Pet(String petId, String petType, String petDOB, double price, int quantity, String image) {
+	super();
+	this.petId = petId;
+	this.petType = petType;
+	this.petDOB = petDOB;
+	this.price = price;
+	this.quantity = quantity;
+	this.image = image;
+}
+@Override
+public String toString() {
+	return "Pet [petId=" + petId + ", petType=" + petType + ", petDOB=" + petDOB + ", price=" + price + ", quantity="
+			+ quantity + ", image=" + image + "]";
+}
+public static void main(String[] args) 
+{
+Scanner scanner=new Scanner(System.in);	
+Locale locale=new Locale("es", "ES");	
+ResourceBundle resourceBundle=ResourceBundle.getBundle("MessageResource_es_ES",locale);
+System.out.println("Enter the petId");
+String petId=scanner.next();
+if(petId.equalsIgnoreCase(resourceBundle.getString("petId1")))
+{
+	System.out.println("image: "+resourceBundle.getString("systemPath1"));
+}
+else if(petId.equalsIgnoreCase(resourceBundle.getString("petId2")))
+{
+	System.out.println("image: "+resourceBundle.getString("systemPath2"));
+}
+else
+{
+	System.out.println("pets are not available:");
+}
+}
+
+}
+
+MessageResources_es_ES.properties file:
+--------------------------------------
+petId1=1
+systemPath1=C:\Users\USER\Pictures\Screenshots\Screenshot (1)
+petId2=2
+systemPath2=C:\Users\USER\Pictures\Screenshots\Screenshot (2)
+systemPath1=C:\Users\USER\Pictures\Screenshots\Screenshot (3)

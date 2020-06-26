@@ -1,0 +1,214 @@
+Address Class:
+-------------
+package com.htc.problem20;
+
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Address implements Serializable
+{
+private String petStoreId;
+private String petStoreName;
+private String streetName;
+private String cityName;
+public String getPetStoreId() {
+	return petStoreId;
+}
+public void setPetStoreId(String petStoreId) {
+	this.petStoreId = petStoreId;
+}
+public String getPetStoreName() {
+	return petStoreName;
+}
+public void setPetStoreName(String petStoreName) {
+	this.petStoreName = petStoreName;
+}
+public String getStreetName() {
+	return streetName;
+}
+public void setStreetName(String streetName) {
+	this.streetName = streetName;
+}
+public String getCityName() {
+	return cityName;
+}
+public void setCityName(String cityName) {
+	this.cityName = cityName;
+}
+public Address(String petStoreId, String petStoreName, String streetName, String cityName) {
+	super();
+	this.petStoreId = petStoreId;
+	this.petStoreName = petStoreName;
+	this.streetName = streetName;
+	this.cityName = cityName;
+}
+@Override
+public String toString() {
+	return "Address [petStoreId=" + petStoreId + ", petStoreName=" + petStoreName + ", streetName=" + streetName
+			+ ", cityName=" + cityName + "]";
+}
+
+}
+
+PetStore Class:
+--------------
+package com.htc.problem20;
+
+import java.io.Serializable;
+import java.util.List;
+
+@SuppressWarnings("serial")
+public class PetStore implements Serializable
+{
+private Address address;
+private List<Pet> pet;
+public Address getAddress() {
+	return address;
+}
+public void setAddress(Address address) {
+	this.address = address;
+}
+public List<Pet> getPet() {
+	return pet;
+}
+public void setPet(List<Pet> pet) {
+	this.pet = pet;
+}
+public PetStore(Address address, List<Pet> pet) {
+	super();
+	this.address = address;
+	this.pet = pet;
+}
+@Override
+public String toString() {
+	return "PetStore [address=" + address + ", pet=" + pet + "]";
+}
+
+}
+
+Pet Class:
+---------
+package com.htc.problem20;
+
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Pet implements Serializable
+{
+private String petId;
+private String petType;
+private String petDOB;
+private double price;
+private int quantity;
+public String getPetId() {
+	return petId;
+}
+public void setPetId(String petId) {
+	this.petId = petId;
+}
+public String getPetType() {
+	return petType;
+}
+public void setPetType(String petType) {
+	this.petType = petType;
+}
+public String getPetDOB() {
+	return petDOB;
+}
+public void setPetDOB(String petDOB) {
+	this.petDOB = petDOB;
+}
+public double getPrice() {
+	return price;
+}
+public void setPrice(double price) {
+	this.price = price;
+}
+public int getQuantity() {
+	return quantity;
+}
+public void setQuantity(int quantity) {
+	this.quantity = quantity;
+}
+public Pet()
+{
+	
+}
+public Pet(String petId, String petType, String petDOB, double price, int quantity) {
+	super();
+	this.petId = petId;
+	this.petType = petType;
+	this.petDOB = petDOB;
+	this.price = price;
+	this.quantity = quantity;
+}
+@Override
+public String toString() {
+	return "Pet [petId=" + petId + ", petType=" + petType + ", petDOB=" + petDOB + ", price=" + price + ", quantity="
+			+ quantity + "]";
+}
+public static void main(String[] args) 
+{
+	Pet pet=new Pet();
+	pet.setPetId("1");
+	pet.setPetDOB("2018-09-19");
+	pet.setPetType("rabbits");
+	pet.setPrice(9000.0);
+	pet.setQuantity(9);
+	
+	System.out.println(pet.getPetId());
+	System.out.println(pet.getPetDOB());
+	System.out.println(pet.getPetType());
+	System.out.println(pet.getPrice());
+	System.out.println(pet.getQuantity());
+}
+
+}
+
+Main Class:
+----------
+package com.htc.problem20;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main 
+{	
+static Scanner scanner=new Scanner(System.in);	
+public static void main(String[] args) throws IOException, ClassNotFoundException 
+{
+List<Pet> pet=new ArrayList<Pet>();
+System.out.println("Enter petStoreId:");
+String petStoreId=scanner.next();
+System.out.println("Enter petStoreName:");
+String petStoreName=scanner.next();
+System.out.println("Enter StreetName:");
+String streetName=scanner.next();
+System.out.println("Enter CityName:");
+String cityName=scanner.next();
+Address address=new Address(petStoreId, petStoreName, streetName, cityName);
+pet.add(new Pet("1","rabbits","2018-09-19",9000.0,9));
+pet.add(new Pet("2","dogs","2019-09-09",8900.0,9));
+PetStore petStore=new PetStore(address, pet);
+System.out.println(petStore);	
+FileOutputStream fileOutputStream=new FileOutputStream("PetStore.txt");
+ObjectOutputStream objectOutputStream=new ObjectOutputStream(fileOutputStream);
+objectOutputStream.writeObject(petStore);
+objectOutputStream.close();
+fileOutputStream.close();
+
+//Deserialization process 
+/*FileInputStream fileInputStream=new FileInputStream("PetStore.txt");
+ObjectInputStream objectInputStream=new ObjectInputStream(fileInputStream);
+PetStore petStore2=(PetStore)objectInputStream.readObject();
+System.out.println(petStore2);
+objectInputStream.close();
+fileInputStream.close();*/
+}
+}

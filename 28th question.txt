@@ -1,0 +1,89 @@
+ConnectDB Class:
+---------------
+
+package com.htc.probl26;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class ConnectDB 
+{
+static Connection connection=null;	
+public static Connection getConnection()
+{
+	try
+	{
+		Class.forName("org.postgresql.Driver");
+		connection=DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","9790270846");
+		System.out.println("connnected successfully to the database");
+	} 
+	catch (Exception e)
+	{
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	return connection;
+}
+}
+
+UnloadingCustomers Class:
+------------------------
+
+package com.htc.probl28;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.Types;
+import java.util.Scanner;
+
+import com.htc.probl26.ConnectDB;
+
+public class UnloadingCustomers 
+{
+static Scanner scanner=new Scanner(System.in);	
+public static void main(String[] args) 
+{
+try
+{
+	Connection connection=ConnectDB.getConnection();
+	System.out.println("Enter the customerId to unload from the data base:");
+	String customerId=scanner.next();
+	CallableStatement callableStatement=connection.prepareCall("{?=call unloadCustomers(?)}");
+	callableStatement.registerOutParameter(1, Types.INTEGER);
+	callableStatement.setString(2, customerId);
+	callableStatement.execute();
+	int output=callableStatement.getInt(1);
+	if(output==1)
+	{
+	    System.out.println("successfully unloaded the customer details");
+	}
+	else
+	{
+		System.out.println("invalid customerId");
+	}
+} 
+catch (Exception e) 
+{
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
+
+}
+}
+
+Postgresql function:
+-------------------
+
+CREATE OR REPLACE FUNCTION unloadCustomers(customer_Id VARCHAR(3))
+RETURNS INTEGER
+AS
+$body$
+DECLARE
+i INTEGER:=0;
+BEGIN 
+DELETE FROM customer WHERE customerId2=customer_Id;
+i:=1;
+RETURN i;
+END;
+$body$
+language 'plpgsql';
